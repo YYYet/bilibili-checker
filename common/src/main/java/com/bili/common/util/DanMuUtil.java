@@ -64,9 +64,9 @@ public class DanMuUtil {
             UserInfo userInfoFromDanMu = getUserInfoFromDanMu(row);
             feedInfo.setUserInfo(userInfoFromDanMu);
             feedInfo.setBox(false);
-            if (row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.BATCH_COMBO_SEND) != null){
+            if (row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.BATCH_COMBO_SEND) != null && !row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.BATCH_COMBO_SEND).isNull()){
                 JsonNode COMBO = row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.BATCH_COMBO_SEND);
-                if (COMBO.get(BiliConstant.BLING_GIFT) != null){
+                if (!COMBO.get(BiliConstant.BLING_GIFT).isNull()){
                     String BoxName = COMBO.get(BiliConstant.BLING_GIFT).get(BiliConstant.ORIGINAL_GIFT_NAME).asText();
                     giftInfo.setActualPrice(COMBO.get(BiliConstant.BLING_GIFT).get(BiliConstant.ORIGINAL_GIFT_PRICE).asLong());
                     feedInfo.setBox(true);
