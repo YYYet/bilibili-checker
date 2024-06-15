@@ -1,0 +1,36 @@
+websocket:
+  url: ws://127.0.0.1:9898
+server:
+  port: 28888
+
+checker:
+  auto_connect: false
+
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: Aa12345678
+  datasource:
+    dynamic:
+      primary: or_barrage_fly # 默认使用mater库
+      strict: false   # 不使用严格模式
+      datasource:
+        or_barrage_fly:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/or_barrage_fly?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+          username: root
+          password: Aa12345678
+        bili_room_checker:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/bili_room_checker?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+          username: root
+          password: Aa12345678
+
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+
+
+
