@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bili.common.entity.bili.RoomInfo;
 import com.bili.common.entity.bili.UserInfo;
 import com.bili.common.entity.mysql.EnterRoomInfo;
-import com.bili.common.util.CommonUtil;
+import com.bili.common.util.CommonHelper;
 import com.bili.common.util.DanMuUtil;
 import com.bili.dao.mapper.EnterRoomInfoMapper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 public class EnterRoomInfoServiceImpl {
     @Resource
-    CommonUtil commonUtil;
+    CommonHelper commonHelper;
     @Resource
     EnterRoomInfoMapper enterRoomInfoMapper;
 
@@ -79,7 +79,7 @@ public class EnterRoomInfoServiceImpl {
      * @throws ParseException
      */
     public List<EnterRoomInfo> getEnterDataByDay(String roomId, String dateString) throws ParseException {
-        LocalDate targetDate = commonUtil.dateStr2LocalDate(dateString);
+        LocalDate targetDate = commonHelper.dateStr2LocalDate(dateString);
         QueryWrapper<EnterRoomInfo> queryWrapper = new QueryWrapper<>();
         LocalDateTime startDateTime = LocalDateTime.of(targetDate, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(targetDate.plusDays(1), LocalTime.MIN);

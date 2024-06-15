@@ -4,12 +4,12 @@ package com.bili.service.wechat.command.impl;
 import cn.hutool.json.JSONObject;
 import com.bili.common.config.CustomConfig;
 import com.bili.common.entity.wx.CommandSign;
-import com.bili.common.util.CommonUtil;
+import com.bili.common.util.CommonHelper;
 import com.bili.service.db.ConfigServiceImpl;
 import com.bili.service.wechat.bot.WechatBotServiceImpl;
 import com.bili.service.wechat.command.WxBotCommander;
 import jakarta.annotation.Resource;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,14 +17,16 @@ import org.springframework.stereotype.Component;
  * @date 2024/5/28
  **/
 @Component
+@Scope("prototype")
 public class AnalyzeCardImpl implements WxBotCommander {
 
     @Resource
-    private ConfigServiceImpl configService;
+    ConfigServiceImpl configService;
     @Resource
-    private WechatBotServiceImpl wechatBotServiceImpl;
+    WechatBotServiceImpl wechatBotServiceImpl;
     @Resource
-    private CommonUtil commonUtil;
+    CommonHelper commonHelper;
+
     private JSONObject value;
 
     public void setValue(JSONObject value) {
@@ -47,21 +49,16 @@ public class AnalyzeCardImpl implements WxBotCommander {
             cardUrl = netHost+pagePath+"?roomId="+roomId;
         }
         String name= value.getStr("name");
-        return getString(arg, digest, thumbUrl, account, title, cardUrl, name, commonUtil, wechatBotServiceImpl);
-    }
-
-    @Nullable
-    static String getString(CommandSign arg, String digest, String thumbUrl, String account, String title, String cardUrl, String name, CommonUtil commonUtil, WechatBotServiceImpl wechatBotServiceImpl) {
-        String receiver;
-        if (commonUtil.isGroupMsg(arg)){
+        if (commonHelper.isGroupMsg(arg)){
             receiver = arg.getRoomId();
             wechatBotServiceImpl.sendCard(receiver, digest, thumbUrl, account, title, cardUrl, name);
         }
-        if (commonUtil.isPersonMsg(arg)){
+        if (commonHelper.isPersonMsg(arg)){
             receiver = arg.getWxId();
             wechatBotServiceImpl.sendCard(receiver, digest, thumbUrl, account, title, cardUrl, name);
         }
-
         return null;
     }
+
+
 }

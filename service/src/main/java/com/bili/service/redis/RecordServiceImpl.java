@@ -2,7 +2,7 @@ package com.bili.service.redis;
 
 import com.bili.common.constant.RedisConstant;
 import com.bili.common.entity.bili.*;
-import com.bili.common.util.CommonUtil;
+import com.bili.common.util.CommonHelper;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class RecordServiceImpl {
     @Resource
     RedisTemplate redisTemplate;
     @Resource
-    CommonUtil commonUtil;
+    CommonHelper commonHelper;
 
     /**
      * 计算礼物价格并存入redis
@@ -26,7 +26,7 @@ public class RecordServiceImpl {
      */
     public void recordGiftPrice2Redis(FeedInfo feedInfo){
 
-        String today = commonUtil.nowDate2SelfStyle();
+        String today = commonHelper.nowDate2SelfStyle();
         GiftInfo gift = feedInfo.getGift();
         UserInfo userInfo = feedInfo.getUserInfo();
         long num = feedInfo.getNum();
@@ -56,18 +56,18 @@ public class RecordServiceImpl {
         }
     }
     public void recordDanMuScore2Redis(String roomId, String uid){
-        String today = commonUtil.buildTodayDateStr();
+        String today = commonHelper.buildTodayDateStr();
         String roomLiveDanMuScore = String.format(RedisConstant.roomliveDanMuScore, roomId, today);
         redisTemplate.opsForZSet().incrementScore(roomLiveDanMuScore, uid, 1);
     }
 
     public void recordVisitScore2Redis(String roomId, String uid){
-        String today = commonUtil.buildTodayDateStr();
+        String today = commonHelper.buildTodayDateStr();
         String roomLiveVisitScore = String.format(RedisConstant.roomliveVisitScore, roomId, today);
         redisTemplate.opsForZSet().incrementScore(roomLiveVisitScore, uid, 1);
     }
     public void recordUserName2Redis(String roomId, String uid, String userName){
-        String today = commonUtil.buildTodayDateStr();
+        String today = commonHelper.buildTodayDateStr();
         String roomLiveDataKey = String.format(RedisConstant.roomliveUSer, roomId, today, uid);
         Boolean hasName = redisTemplate.opsForHash().hasKey(roomLiveDataKey, "name");
         if (!hasName){

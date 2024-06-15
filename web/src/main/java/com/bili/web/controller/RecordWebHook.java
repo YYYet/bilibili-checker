@@ -75,8 +75,11 @@ public class RecordWebHook {
             content = "";
         }
         try {
-            if (wxMessageInfo.containsKey("sender")) {
+            if (wxMessageInfo.containsKey("sender") && wxMessageInfo.containsKey("roomid")) {
                 log.info("收到微信id来自 {}({}) 的信息 [{}]", wechatBotServiceImpl.getUserName(wxMessageInfo.get("sender").toString()), wechatBotServiceImpl.getChatGroupName(wxMessageInfo.get("roomid").toString()), wxMessageInfo.get("content"));
+            }
+            if (wxMessageInfo.containsKey("sender") && !wxMessageInfo.containsKey("roomid")) {
+                log.info("收到微信id来自 {}({}) 的信息 [{}]", wechatBotServiceImpl.getUserName(wxMessageInfo.get("sender").toString()), wxMessageInfo.get("sender").toString(), wxMessageInfo.get("content"));
             }
         } catch (Exception e) {
             log.error("微信消息有参数为空 {}", e);
