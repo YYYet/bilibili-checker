@@ -1,7 +1,7 @@
 package com.bili.sdk.service.web.sdk;
 
 import cn.hutool.json.JSONUtil;
-import com.bili.sdk.common.util.CommonUtil;
+import com.bili.sdk.common.util.BiliCommonUtil;
 import com.bili.sdk.service.web.api.WebLoginApi;
 import com.bili.sdk.service.web.entity.resp.qrcodeinfo.QRcodeInfoResp;
 import com.bili.sdk.service.web.entity.resp.verifyqrcodeinfo.VerifyQRcodeInfoResp;
@@ -46,7 +46,7 @@ public class WebLoginSdk extends WebLoginApi {
                     if(verifyQRcodeInfoRespObj.getData().getCode() == 0){
                         System.out.println("登录完成");
                         System.out.println("cookie："+verifyQRcodeInfoResp.getCookies());
-                        CommonUtil.saveCookieOrToken(verifyQRcodeInfoResp.getCookies().toString(), false);
+                        BiliCommonUtil.saveCookieOrToken(verifyQRcodeInfoResp.getCookies().toString(), false);
                         timer.cancel();
                     }
                     if(verifyQRcodeInfoRespObj.getData().getCode() == 86038){
@@ -76,7 +76,7 @@ public class WebLoginSdk extends WebLoginApi {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("qrcode_key", authCode);
 //        data.put("local_id", "0");
-//        data.put("ts", CommonUtil.getTimeStamps());
+//        data.put("ts", BiliCommonUtil.getTimeStamps());
 //        data.put("auth_code", authCode);
 //        HashMap<String, String> signature = WebSignUtil.signature(data);
         return webLoginReq.scanQRcode(data);

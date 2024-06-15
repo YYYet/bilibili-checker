@@ -23,6 +23,11 @@
         </dependency>
         <dependency>
             <groupId>com.bili</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bili</groupId>
             <artifactId>bili-sdk</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

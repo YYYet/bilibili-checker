@@ -16,7 +16,7 @@ import java.util.Date;
  * @date 2024/6/14
  **/
 @Component
-public class CommonUtil {
+public class CommonHelper {
     public LocalDate dateStr2LocalDate(String dateString) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = sdf.parse(dateString);

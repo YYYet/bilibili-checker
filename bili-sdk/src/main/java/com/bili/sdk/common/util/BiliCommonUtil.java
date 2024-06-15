@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.bili.sdk.common.constant.BaseConstant;
 import com.bili.sdk.service.tv.entity.resp.verifyqrcodeinfo.Cookies;
 import com.bili.sdk.service.tv.entity.resp.verifyqrcodeinfo.VerifyQRcodeInfoResp;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.Instant;
@@ -15,7 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class CommonUtil {
+
+public class BiliCommonUtil {
     public static String list2Cookie( VerifyQRcodeInfoResp verifyQRcodeInfoResp){
         StringBuffer sb = new StringBuffer();
         for (Cookies cookie : verifyQRcodeInfoResp.getData().getCookie_info().getCookies()) {
@@ -82,7 +84,7 @@ public class CommonUtil {
         query.put("access_key", accessToken);
         query.put("actionKey", BaseConstant.actionKey);
         query.put("appkey", BaseConstant.appTvkey);
-        query.put("ts", CommonUtil.getTimeStamps());
+        query.put("ts", BiliCommonUtil.getTimeStamps());
         return query;
     }
 
@@ -91,7 +93,7 @@ public class CommonUtil {
         HashMap<String, String> DanMu = new HashMap<>();
         DanMu.put("cid", String.valueOf(roomId));
         DanMu.put("msg", danMuKu);
-        DanMu.put("rnd", CommonUtil.getTimeStamps());
+        DanMu.put("rnd", BiliCommonUtil.getTimeStamps());
         DanMu.put("color", "16777215");
         DanMu.put("fontsize", "25");
         return DanMu;
@@ -102,7 +104,7 @@ public class CommonUtil {
         query.put("access_key", accessToken);
         query.put("actionKey", BaseConstant.actionKey);
         query.put("appkey", BaseConstant.appTvkey);
-        query.put("ts", CommonUtil.getTimeStamps());
+        query.put("ts", BiliCommonUtil.getTimeStamps());
         return query;
     }
     public static HashMap<String, String> initGiveLikeParams(HashMap<String, String> map,long roomId){
@@ -117,7 +119,7 @@ public class CommonUtil {
     public static HashMap<String, String> initHeartbeatParams(HashMap<String, String> map,long roomId, String[] uuids, String upId){
         map.put("platform", "android");
         map.put("uuid", uuids[0]);
-        map.put("buvid", CommonUtil.randomString(37).toUpperCase());
+        map.put("buvid", BiliCommonUtil.randomString(37).toUpperCase());
         map.put("seq_id", "1");
         map.put("room_id", String.valueOf(roomId));
         map.put("parent_id", "6");
@@ -128,14 +130,14 @@ public class CommonUtil {
         map.put("up_id", upId);
         map.put("up_level", "40");
         map.put("jump_from", "30000");
-        map.put("gu_id", CommonUtil.randomString(43).toUpperCase());
+        map.put("gu_id", BiliCommonUtil.randomString(43).toUpperCase());
         map.put("play_type", "0");
         map.put("play_url", "");
         map.put("s_time", "0");
         map.put("data_behavior_id", "");
         map.put("data_source_id", "");
         map.put("up_session", String.format("l:one:live:record:%d:%d", roomId,  Instant.now().getEpochSecond() - 88888));
-        map.put("visit_id", CommonUtil.randomString(32).toUpperCase());
+        map.put("visit_id", BiliCommonUtil.randomString(32).toUpperCase());
         map.put("watch_status", "%7B%22pk_id%22%3A0%2C%22screen_status%22%3A1%7D");
         map.put("click_id", uuids[1]);
         map.put("session_id", "");
@@ -149,21 +151,21 @@ public class CommonUtil {
     public static HashMap<String, String> initEntryRoomParams(HashMap<String, String> map,long roomId, String[] uuids, String upId){
         map.put("platform", "android");
         map.put("uuid", uuids[0]);
-        map.put("buvid", CommonUtil.randomString(37).toUpperCase());
+        map.put("buvid", BiliCommonUtil.randomString(37).toUpperCase());
         map.put("seq_id", "1");
         map.put("room_id", String.valueOf(roomId));
         map.put("parent_id", "6");
         map.put("area_id", "283");
-        map.put("timestamp", String.valueOf(CommonUtil.getTimeStampsWithLong()-60));
+        map.put("timestamp", String.valueOf(BiliCommonUtil.getTimeStampsWithLong()-60));
         map.put("up_id", upId);
         map.put("watch_time", "60");
         map.put("up_level", "40");
         map.put("jump_from", "30000");
-        map.put("gu_id", CommonUtil.randomString(43).toUpperCase());
-        map.put("visit_id", CommonUtil.randomString(32).toUpperCase());
+        map.put("gu_id", BiliCommonUtil.randomString(43).toUpperCase());
+        map.put("visit_id", BiliCommonUtil.randomString(32).toUpperCase());
         map.put("click_id", uuids[1]);
         map.put("heart_beat", "[]");
-        map.put("client_ts", CommonUtil.getTimeStamps());
+        map.put("client_ts", BiliCommonUtil.getTimeStamps());
         return map;
     }
 

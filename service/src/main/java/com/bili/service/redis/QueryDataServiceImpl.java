@@ -1,8 +1,7 @@
 package com.bili.service.redis;
 
-import cn.hutool.core.date.DateUtil;
 import com.bili.common.constant.RedisConstant;
-import com.bili.common.util.CommonUtil;
+import com.bili.common.util.CommonHelper;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.HashOperations;
@@ -22,7 +21,7 @@ public class QueryDataServiceImpl {
     @Resource
     RedisTemplate redisTemplate;
     @Resource
-    CommonUtil commonUtil;
+    CommonHelper commonHelper;
 
     public ArrayList<HashMap<String, Object>> getDieByDate(String date, String roomId){
         String dieKey = String.format(RedisConstant.die, roomId, date);
@@ -82,7 +81,7 @@ public class QueryDataServiceImpl {
 
 
     public String getUserNameByUid(String roomId, String uid){
-        String today = commonUtil.buildTodayDateStr();
+        String today = commonHelper.buildTodayDateStr();
         String roomliveDataKey = String.format(RedisConstant.roomliveUSer, roomId, today, uid);
 
         return redisTemplate.opsForHash().get(roomliveDataKey, "name").toString();
@@ -114,7 +113,7 @@ public class QueryDataServiceImpl {
 
 
     public String getRoomALlUnfreeGiftPrice(String roomId){
-        String today = commonUtil.buildTodayDateStr();
+        String today = commonHelper.buildTodayDateStr();
         String roomUnfreeGifAllPriceKey = String.format(RedisConstant.roomUnfreeGifAllPriceKey, roomId, today);
         Object price = redisTemplate.opsForHash().get(roomUnfreeGifAllPriceKey, "price");
         return price.toString();
@@ -129,7 +128,7 @@ public class QueryDataServiceImpl {
         return price.toString();
     }
     public String getRoomALlUnfreeGiftPrice(String roomId, int limitDay){
-        String day = commonUtil.buildDateStr(limitDay);
+        String day = commonHelper.buildDateStr(limitDay);
         String roomUnfreeGifAllPriceKey = String.format(RedisConstant.roomUnfreeGifAllPriceKey, roomId, day);
         Object price = redisTemplate.opsForHash().get(roomUnfreeGifAllPriceKey, "price");
         return price.toString();

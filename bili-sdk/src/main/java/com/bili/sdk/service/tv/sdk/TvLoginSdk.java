@@ -2,7 +2,7 @@ package com.bili.sdk.service.tv.sdk;
 
 import cn.hutool.core.net.URLEncodeUtil;
 import cn.hutool.json.JSONUtil;
-import com.bili.sdk.common.util.CommonUtil;
+import com.bili.sdk.common.util.BiliCommonUtil;
 import com.bili.sdk.common.util.QRCodeUtil;
 import com.bili.sdk.common.util.TvSignUtil;
 import com.bili.sdk.service.tv.api.TvLoginApi;
@@ -38,7 +38,7 @@ public class TvLoginSdk extends TvLoginApi {
 //        data.put("mobi_app", "android");
 //        data.put("platform", "android");
 //        data.put("tel", "+"+phoneNumber);
-//        data.put("ts", CommonUtil.getTimeStamps());
+//        data.put("ts", BiliCommonUtil.getTimeStamps());
 //        TvSignUtil.signatureByAndroidWithoutReturn(data);
 //
 //        System.out.println(Forest.post(SEND_SMS_URL).contentTypeMultipartFormData().addBody(data).execute(String.class));
@@ -54,7 +54,7 @@ public class TvLoginSdk extends TvLoginApi {
     public QRcodeInfoResp getQRcode() throws Exception {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("local_id", "0");
-        data.put("ts", CommonUtil.getTimeStamps());
+        data.put("ts", BiliCommonUtil.getTimeStamps());
 //        data.put("appkey", BaseConstant.appTvkey);
         HashMap<String, String> signature = TvSignUtil.signature(data);
 
@@ -81,7 +81,7 @@ public class TvLoginSdk extends TvLoginApi {
     public VerifyQRcodeInfoResp verifyQRcode(String authCode) throws Exception {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("local_id", "0");
-        data.put("ts", CommonUtil.getTimeStamps());
+        data.put("ts", BiliCommonUtil.getTimeStamps());
         data.put("auth_code", authCode);
         HashMap<String, String> signature = TvSignUtil.signature(data);
         ForestResponse forestResponse = tvLoginReq.verifyQRcodeWithForestResponse("multipart/form-data", signature);
@@ -113,7 +113,7 @@ public class TvLoginSdk extends TvLoginApi {
                         System.out.println("登录完成");
 //                        System.out.println(JSONUtil.toJsonStr(verifyQRcodeInfoResp.getData()));
 //                        System.out.println(verifyQRcodeInfoResp.getData().getCookie_info());
-                        String cookie = CommonUtil.list2Cookie(verifyQRcodeInfoResp);
+                        String cookie = BiliCommonUtil.list2Cookie(verifyQRcodeInfoResp);
                         System.out.println(cookie);
 //                        System.out.println(JSONUtil.toJsonStr(verifyQRcodeInfoResp.getData().getCookie_info()));
                         HashMap<String, Object> result = new HashMap<>();
@@ -122,7 +122,7 @@ public class TvLoginSdk extends TvLoginApi {
                         for (Cookies cookieSingle : verifyQRcodeInfoResp.getData().getCookie_info().getCookies()) {
                             result.put(cookieSingle.getName(), cookieSingle);
                         }
-                        CommonUtil.saveCookieOrToken(JSONUtil.toJsonStr(result), true);
+                        BiliCommonUtil.saveCookieOrToken(JSONUtil.toJsonStr(result), true);
                         timer.cancel();
                     }
                     if(verifyQRcodeInfoResp.getCode() == 86038){
