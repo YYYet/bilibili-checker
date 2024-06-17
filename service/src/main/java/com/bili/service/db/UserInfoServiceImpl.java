@@ -32,22 +32,40 @@ public class UserInfoServiceImpl {
             UserDataHis userDataHis = new UserDataHis();
             userDataHis.setUid(userInfo.getUid());
 
-            if (!userFromDb.getAvatar().equals(user.getAvatar())){
+            if (!userFromDb.getAvatar().equals(user.getAvatar()) && !userFromDb.getUserName().equals(user.getUserName())){
                 userDataHis.setDataType(UserHisDataTypeEnum.HIS_AVATAR.name());
                 userDataHis.setUserData(user.getAvatar());
                 boolean exists = userDataHisMapper.exists(new QueryWrapper<UserDataHis>().eq("uid", userInfo.getUid()).eq("user_data", user.getAvatar()));
                 if (!exists){
                     userDataHisMapper.insert(userDataHis);
                 }
-            }
-            if (!userFromDb.getUserName().equals(user.getUserName())){
+
                 userDataHis.setDataType(UserHisDataTypeEnum.HIS_NAME.name());
                 userDataHis.setUserData(user.getUserName());
-                boolean exists = userDataHisMapper.exists(new QueryWrapper<UserDataHis>().eq("uid", userInfo.getUid()).eq("user_data", user.getUserName()));
+                exists = userDataHisMapper.exists(new QueryWrapper<UserDataHis>().eq("uid", userInfo.getUid()).eq("user_data", user.getUserName()));
                 if (!exists){
                     userDataHisMapper.insert(userDataHis);
                 }
+            }else {
+                if (!userFromDb.getAvatar().equals(user.getAvatar())){
+                    userDataHis.setDataType(UserHisDataTypeEnum.HIS_AVATAR.name());
+                    userDataHis.setUserData(user.getAvatar());
+                    boolean exists = userDataHisMapper.exists(new QueryWrapper<UserDataHis>().eq("uid", userInfo.getUid()).eq("user_data", user.getAvatar()));
+                    if (!exists){
+                        userDataHisMapper.insert(userDataHis);
+                    }
+                }
+                if (!userFromDb.getUserName().equals(user.getUserName())){
+                    userDataHis.setDataType(UserHisDataTypeEnum.HIS_NAME.name());
+                    userDataHis.setUserData(user.getUserName());
+                    boolean exists = userDataHisMapper.exists(new QueryWrapper<UserDataHis>().eq("uid", userInfo.getUid()).eq("user_data", user.getUserName()));
+                    if (!exists){
+                        userDataHisMapper.insert(userDataHis);
+                    }
+                }
             }
+
+
 
         }else {
             userMapper.insert(user);
