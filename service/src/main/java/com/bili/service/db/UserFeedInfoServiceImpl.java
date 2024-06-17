@@ -28,6 +28,31 @@ public class UserFeedInfoServiceImpl {
     UserFeedInfoMapper userFeedInfoMapper;
 
 
+    public void recordUserFeedFromGuardData(JsonNode row){
+        FeedInfo feedInfo = DanMuUtil.getGiftFromGuardData(row);
+
+        FeedInfo giftFromDanMu = feedInfo;
+        UserInfo userInfoFromDanMu = feedInfo.getUserInfo();
+        RoomInfo roomInfoFromRow = feedInfo.getRoomInfo();
+
+        UserFeedInfo userFeedInfo = new UserFeedInfo();
+        userFeedInfo.setFeedNum((int) giftFromDanMu.getNum());
+        userFeedInfo.setGiftName(giftFromDanMu.getGift().getGiftName());
+        userFeedInfo.setGiftPrice(BigDecimal.valueOf(giftFromDanMu.getGift().getGiftPrice()));
+        userFeedInfo.setGiftType(giftFromDanMu.getGift().isFree()?"免费":"付费");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        userFeedInfo.setFeedTime(currentDateTime);
+        userFeedInfo.setUserId(userInfoFromDanMu.getUid());
+        userFeedInfo.setUserName(userInfoFromDanMu.getUserName());
+        userFeedInfo.setTotalPrice(userFeedInfo.getGiftPrice().multiply(BigDecimal.valueOf(userFeedInfo.getFeedNum())));
+        userFeedInfo.setRoomId(roomInfoFromRow.getRoomId());
+        userFeedInfo.setBoxName(giftFromDanMu.getBoxName());
+        BigDecimal actualPrice = BigDecimal.valueOf(giftFromDanMu.getGift().getActualPrice()).multiply(BigDecimal.valueOf(userFeedInfo.getFeedNum()));
+        userFeedInfo.setActualPrice(actualPrice);
+        userFeedInfo.setBalance(userFeedInfo.getTotalPrice().subtract(actualPrice));
+        userFeedInfo.setFeedTimeIndex(DateUtil.today());
+        userFeedInfoMapper.insert(userFeedInfo);
+    }
     public void recordUserFeed(JsonNode row){
         FeedInfo giftFromDanMu = DanMuUtil.getGiftFromDanMu(row);
         UserInfo userInfoFromDanMu = DanMuUtil.getUserInfoFromDanMu(row);
