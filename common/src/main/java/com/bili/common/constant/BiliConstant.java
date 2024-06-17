@@ -39,6 +39,7 @@ public class BiliConstant {
     public static final String ORIGINAL_GIFT_NAME = "original_gift_name";
     public static final String GIFT_TIP_PRICE = "gift_tip_price";
     public static final String ORIGINAL_GIFT_PRICE = "original_gift_price";
+    public static final String SOURCE = "source";
 
     public static String MSG = "msg";
     public static String TYPE = "type";

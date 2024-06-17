@@ -21,11 +21,13 @@ import java.util.List;
 @Component
 @Slf4j
 public class BiliBotServiceImpl {
-    public static String masterBotAccessToken;
-    public static ArrayList<String> botAccessTokenList = new ArrayList<>();
-
     @Resource
     private ConfigServiceImpl configService;
+    @Resource
+    TvLiveSdk tvLiveSdk;
+
+    public static String masterBotAccessToken;
+    public static ArrayList<String> botAccessTokenList = new ArrayList<>();
 
     @PostConstruct
     public void init(){
@@ -34,9 +36,7 @@ public class BiliBotServiceImpl {
         this.masterBotAccessToken = this.botAccessTokenList.get(0);
     }
 
-    @Resource
-    TvLiveSdk tvLiveSdk;
     public void sendMsg(String roomId, String msg) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        tvLiveSdk.sendDanMuKu(masterBotAccessToken, Long.parseLong(roomId), msg);
+        boolean b = tvLiveSdk.sendDanMuKu(masterBotAccessToken, Long.parseLong(roomId), msg);
     }
 }

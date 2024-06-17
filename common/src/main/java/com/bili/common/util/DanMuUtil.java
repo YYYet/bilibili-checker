@@ -83,22 +83,43 @@ public class DanMuUtil {
     }
     public static FeedInfo getGiftFromGuardData(JsonNode row){
         FeedInfo feedInfo = new FeedInfo();
-
         GiftInfo giftInfo = new GiftInfo();
+        JsonNode source = row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.SOURCE);
         giftInfo.setGiftPrice(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.PRICE).asLong());
         giftInfo.setGiftName(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.UNIT).asText()+row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.ROLE_NAME).asText());
-        giftInfo.setFree(false);
-
-        feedInfo.setGift(giftInfo);
-        feedInfo.setNum(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.NUM).asLong());
-
         UserInfo userInfo = new UserInfo();
         userInfo.setUid(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.UID).asText());
         userInfo.setUserName(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.USERNAME).asText());
         feedInfo.setUserInfo(userInfo);
+        String unit = row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.UNIT).asText();
+        feedInfo.setBox(false);
+        if (source != null){
+            if (source.asInt() == 0){
+                giftInfo.setActualPrice(giftInfo.getGiftPrice());
+            }
+            if (source.asInt() == 1){
 
-
-
+            }
+            if (source.asInt() == 2){
+                String day = unit.replace("*", "").replace("天", "");
+                long tempPrice =  138000;
+                if (giftInfo.getGiftName().contains("舰长")){
+                    tempPrice =  138000;
+                }
+                if (giftInfo.getGiftName().contains("提督")){
+                    tempPrice =  1998000;
+                }
+                if (giftInfo.getGiftName().contains("舰长")){
+                    tempPrice =  19998000;
+                }
+                feedInfo.setBox(true);
+                feedInfo.setBoxName("大航海盲盒");
+                giftInfo.setActualPrice((tempPrice/30)*Long.parseLong(day));
+            }
+        }
+        giftInfo.setFree(false);
+        feedInfo.setGift(giftInfo);
+        feedInfo.setNum(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.NUM).asLong());
         RoomInfo roomInfoFromRow = getRoomInfoFromRow(row);
         feedInfo.setRoomInfo(roomInfoFromRow);
 

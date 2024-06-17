@@ -121,6 +121,10 @@ public class RecordWebHook {
         List<Config> liveNoticeConfig = configService.getLiveNoticeConfig();
 
         liveNoticeConfig.forEach(config -> {
+            boolean isJson = JSONUtil.isTypeJSON(config.getValue());
+            if (!isJson){
+                return;
+            }
             NoticeDTO noticeConfig = JSONUtil.parseObj(config.getValue()).toBean(NoticeDTO.class);
             if (recordEvent.getEventData().getRoomId().equals(config.getName().trim()) && recordEvent.getEventType().equals("StreamStarted")) {
                 log.info("config {} {}", config.getName(), recordEvent.getEventData().getRoomId());
