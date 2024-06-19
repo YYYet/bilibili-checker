@@ -47,11 +47,18 @@ public class AnalyzeCardImpl implements WxBotCommander {
         String account = value.getStr("account");
         String title = value.getStr("title");
         String cardUrl = value.getStr("cardUrl");
-
-        if (!liveWechatRelationService.hasRelation(arg.getRoomId(), value.getStr("roomId"))){
-            log.info("当前直播间和微信群无绑定关系");
+        String key = "";
+        if (arg.isGroup()){
+            key = arg.getRoomId();
+        }
+        if (arg.isGroup()){
+            key = arg.getWxId();
+        }
+        if (!liveWechatRelationService.hasRelation(key, value.getStr("roomId"))){
+            log.info("当前直播间和微信群/用户无绑定关系");
             return null;
         }
+
 
         if (cardUrl.isEmpty()){
             String netHost = configService.getNetConfig(CustomConfig.NET_FRP_HOST).getValue();
