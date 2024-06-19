@@ -27,20 +27,32 @@
     </el-select>
 
     <div  v-show="tarGetOptionValue=='1'">
-        <div th:insert="~{model/lineChartPage :: lineChartPage}"></div>
+        <div th:replace="~{model/lineChartPage :: lineChartPage}"></div>
     </div>
-    <div  v-show="tarGetOptionValue=='2'">
-        <div th:insert="~{model/parChartPage :: parChartPage}"></div>
-    </div>
+<!--    <div  v-show="tarGetOptionValue=='2'">-->
+<!--        <div th:replace="~{model/parChartPage :: parChartPage}"></div>-->
+<!--    </div>-->
 
     <div v-show="tarGetOptionValue=='3'">
-        <el-tabs v-model="activeName" >
+        <el-tabs v-model="activeName"  type="card">
             <el-tab-pane label="盲盒数据" name="first">
-                <div th:insert="~{model/boxDataPage :: boxDataPage}"></div>
+                <div th:replace="~{model/boxDataPage :: boxDataPage}"></div>
             </el-tab-pane>
-            <el-tab-pane label="礼物清单" name="second">
-                <div th:insert="~{model/giftDataPage :: giftDataPage}"></div>
+            <el-tab-pane label="礼物清单" name="second" >
+
+                <el-tabs v-model="activeName2"  @tab-click="handleClick"  type="card">
+                    <el-tab-pane label="数据" name="second_data">
+                        <div th:replace="~{model/giftDataPage :: giftDataPage}"></div>
+                    </el-tab-pane>
+                    <el-tab-pane label="图表" name="second_chart">
+                        <div th:replace="~{model/parChartPage :: parChartPage}"></div>
+                    </el-tab-pane>
+                </el-tabs>
+
             </el-tab-pane>
+<!--            <el-tab-pane label="礼物清单" name="thrid">-->
+
+<!--            </el-tab-pane>-->
         </el-tabs>
     </div>
 
@@ -88,9 +100,6 @@
           tarGetOptions: [{
               value: '1',
               label: '七日流水分析'
-          }, {
-              value: '2',
-              label: '大爹榜'
           }, {
               value: '3',
               label: '直播数据分析'
@@ -326,11 +335,13 @@
           selectedDate: "",
           selectedBoxDate: "",
           selectedGiftDataDate: "",
+          activeName2: "second_data",
+          activeName: "first",
           tarGetOptionValue: pageIndex
           // selectedDateOption: "d1",
       },
       create() {
-
+          // this.drawPieChart();
 
       },
       mounted() {
@@ -352,7 +363,14 @@
           // // 监听窗口大小变化，重新计算图表大小
           window.addEventListener('resize', this.handleResize);
           // 使用 nextTick 确保 DOM 更新完成后执行操作
+
           this.drawLineChart();
+          //
+          // this.$nextTick(function () {
+          //     this.drawPieChart();
+          // });
+
+          // this.drawPieChart();
           // this.drawEnterRoomDataLineChart();
           that = this;
           // setInterval(() => {
@@ -373,6 +391,10 @@
           });
       },
       methods: {
+          handleClick(tab, event) {
+              console.log(tab, event);
+              // this.drawPieChart();
+          },
           tableRowClassName({row, rowIndex}) {
               if(rowIndex / 2 == 0){
                   return 'warning-row';
@@ -466,7 +488,9 @@
               });
           },
           updateBarChartDataByDate(date) {
+              this.drawPieChart();
               this.pieChart.showLoading();
+
               that = this;
               $.ajax({
                   url: '/analyze/getDieData?date=' + date+"&roomId="+currentRoomId, // 后端接口地址
@@ -559,16 +583,8 @@
                       const formattedDate = year + '-' + month + '-' + day;
                       console.log("chart "+formattedDate);
                       that.selectedDate = formattedDate;
-
-                      // that.chart2();
-
                       that.drawPieChart();
-                      that.updateBarChartDataByDate(formattedDate);
-
-                      // that.drawBoxPieChart();
-
-
-
+                      // that.updateBarChartDataByDate(formattedDate);
                   });
               }
 
@@ -579,20 +595,21 @@
                       const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
                       const day = currentDate.getDate().toString().padStart(2, '0');
                       const formattedDate = year + '-' + month + '-' + day;
-                      console.log("selectedBoxDate "+formattedDate);
+                      console.log("formattedDate "+formattedDate);
                       that.selectedBoxDate = formattedDate;
                       that.selectedGiftDataDate = formattedDate;
-
                       that.updateBoxChartDataByDate(formattedDate);
                       that.getEveryOneRoomGift(formattedDate);
 
-
+                      // that.updateBarChartDataByDate(formattedDate);
                   });
               }
           },
           drawPieChart(){
               // 使用ECharts绘制饼图
-              this.pieChart = echarts.init(document.getElementById('pieChart'), "macarons");
+              var that = this;
+              that.pieChart = echarts.init(document.getElementById('pieChart'), "macarons");
+
 
               // this.pieChart.setOption(this.pieOption);
           },
