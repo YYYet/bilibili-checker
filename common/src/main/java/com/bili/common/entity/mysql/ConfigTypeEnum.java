@@ -9,6 +9,7 @@ public enum ConfigTypeEnum {
     BILI_SDK,
     ANALYZE_CARD,
     BARRAGE,
+    USER_IP,
     ROBOT, LIVE_NOTICE;
 
 

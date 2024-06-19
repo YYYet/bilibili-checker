@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="giftDataList" th:fragment="giftDataPage">
+
+    <el-row :gutter="10">
+        <div>
+            <el-date-picker
+                    style="width: 100%;"
+                    v-model="selectedGiftDataDate"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择日期"
+                    @change="handleSelectGiftDateChange">
+            </el-date-picker>
+        </div>
+    </el-row>
+    <el-row :gutter="10">
+        <el-divider>礼物数据（电池）</el-divider>
+    </el-row>
+    <el-row :gutter="10">
+        <!--            <div id="boxChart"  :style="{ width: chartWidth, height: chartHeight }" class="col"></div>-->
+        <!--                  :default-sort = "{prop: 'total_price', order: 'ascending'}" v-loading="loading">-->
+        <el-table :data="giftDataList" style="width: 100%"
+                  show-summary
+                  stripe
+                  :default-sort = "{prop: 'total_price', order: 'descending'}" v-loading="giftLoading">
+            <!--                <el-table-column label="uid" prop="user_id"></el-table-column>-->
+            <el-table-column label="用户" prop="user_name" sortable show-overflow-tooltip></el-table-column>
+            <el-table-column label="数量" prop="num" sortable></el-table-column>
+            <el-table-column label="礼物" prop="gift_name" sortable></el-table-column>
+            <el-table-column label="电池" prop="total_price" sortable></el-table-column>
+        </el-table>
+    </el-row>
+
+</div>
+</body>
+</html>

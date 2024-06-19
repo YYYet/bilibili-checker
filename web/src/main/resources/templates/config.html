@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理配置项页面</title>
+    <!-- 引入 Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <!-- 引入 Element UI CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入 Element UI JS -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>后台管理配置项页面</el-header>
+        <el-main>
+            <el-button type="primary" @click="showAddDialog">新增配置项</el-button>
+            <el-table :data="configItems" style="width: 100%">
+                <el-table-column label="ID" prop="id"></el-table-column>
+                <el-table-column label="描述" prop="description"></el-table-column>
+                <el-table-column label="名称" prop="name"></el-table-column>
+                <el-table-column label="类型" prop="type"></el-table-column>
+                <el-table-column label="状态" prop="status"></el-table-column>
+                <el-table-column label="值" prop="value"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="editConfig(scope.row)">编辑</el-button>
+                        <el-button type="text" @click="deleteConfig(scope.$index)">删除</el-button>
+                        <el-button type="text" @click="viewConfig(scope.row)">查看</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+    </el-container>
+
+    <el-dialog title="新增配置项" :visible.sync="addDialogVisible">
+        <el-form :model="newConfigItem" label-width="80px">
+            <el-form-item label="描述">
+                <el-input v-model="newConfigItem.description"></el-input>
+            </el-form-item>
+            <el-form-item label="名称">
+                <el-input v-model="newConfigItem.name"></el-input>
+            </el-form-item>
+            <el-form-item label="类型">
+                <el-input v-model="newConfigItem.type"></el-input>
+            </el-form-item>
+            <el-form-item label="状态">
+                <el-input v-model="newConfigItem.status"></el-input>
+            </el-form-item>
+            <el-form-item label="值">
+                <el-input v-model="newConfigItem.value"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="saveNewConfig">保存</el-button>
+            <el-button @click="addDialogVisible = false">取消</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="编辑配置项" :visible.sync="editDialogVisible">
+        <el-form :model="editedConfigItem" label-width="80px">
+            <el-form-item label="ID">
+                <el-input v-model="editedConfigItem.id" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="描述">
+                <el-input v-model="editedConfigItem.description"></el-input>
+            </el-form-item>
+            <el-form-item label="名称">
+                <el-input v-model="editedConfigItem.name"></el-input>
+            </el-form-item>
+            <el-form-item label="类型">
+                <el-input v-model="editedConfigItem.type"></el-input>
+            </el-form-item>
+            <el-form-item label="状态">
+                <el-input v-model="editedConfigItem.status"></el-input>
+            </el-form-item>
+            <el-form-item label="值">
+                <el-input type="textarea" v-model="editedConfigItem.value"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="saveEditedConfig">保存</el-button>
+            <el-button @click="editDialogVisible = false">取消</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="查看配置项" :visible.sync="viewDialogVisible">
+        <el-form :model="viewConfigItem" label-width="80px">
+<!--            <el-form-item label="ID">-->
+<!--                <el-input v-model="viewConfigItem.id" disabled></el-input>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="描述">-->
+<!--                <el-input v-model="viewConfigItem.description" disabled></el-input>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="名称">-->
+<!--                <el-input v-model="viewConfigItem.name" disabled></el-input>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="类型">-->
+<!--                <el-input v-model="viewConfigItem.type" disabled></el-input>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="状态">-->
+<!--                <el-input v-model="viewConfigItem.status" disabled></el-input>-->
+<!--            </el-form-item>-->
+            <el-form-item label="值">
+                <el-input v-model="viewConfigItem.value" disabled></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="viewDialogVisible = false">关闭</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            configItems: [
+                { id: 1, description: '描述1', name: '名称1', type: '类型1', status: '启用', value: '值1' },
+                { id: 2, description: '描述2', name: '名称2', type: '类型2', status: '停用', value: '值2' }
+            ],
+            addDialogVisible: false,
+            editDialogVisible: false,
+            viewDialogVisible: false,
+            newConfigItem: {
+                id: '',
+                description: '',
+                name: '',
+                type: '',
+                status: '',
+                value: ''
+            },
+            editedConfigItem: {},
+            viewConfigItem: {}
+        },
+        methods: {
+            showAddDialog() {
+                this.addDialogVisible = true;
+            },
+            editConfig(row) {
+                this.editedConfigItem = { ...row };
+                this.editDialogVisible = true;
+            },
+            saveEditedConfig() {
+                // 实现保存编辑配置项逻辑
+                console.log('保存编辑配置项', this.editedConfigItem);
+                this.editDialogVisible = false;
+            },
+            deleteConfig(index) {
+                this.configItems.splice(index, 1);
+            },
+            viewConfig(row) {
+                this.viewConfigItem = { ...row };
+                this.viewDialogVisible = true;
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="parChartPage">
+    <el-row :gutter="10">
+        <div>
+            <el-date-picker
+                    style="width: 100%;"
+                    v-model="selectedDate"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择日期"
+                    @change="handleSelectDateChange">
+            </el-date-picker>
+        </div>
+    </el-row>
+    <el-row :gutter="10">
+        <div class="col">
+            <el-statistic
+                    group-separator=","
+                    :precision="2"
+                    :value="todayTotal"
+                    title="今日恰米"
+            ></el-statistic>
+        </div>
+    </el-row>
+    <el-row :gutter="10">
+        <!--        <div id="barChart" v-loading="barChartLoading" :style="{ width: chartWidth, height: chartHeight }" class="col"></div>-->
+        <div id="pieChart"  :style="{ width: chartWidth, height: chartHeight }" class="col"></div>
+    </el-row>
+</div>
+</body>
+</html>

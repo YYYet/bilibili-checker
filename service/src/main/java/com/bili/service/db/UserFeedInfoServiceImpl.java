@@ -12,6 +12,7 @@ import com.bili.dao.mapper.UserFeedInfoMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -97,16 +98,39 @@ public class UserFeedInfoServiceImpl {
     public List<Map<String, Object>> getEveryOneRoomBalance(String roomId, String dateString, String boxType) {
 
         QueryWrapper<UserFeedInfo> queryWrapper = Wrappers.query();
-        queryWrapper.select("sum(balance)/100 as balance", "user_id", "user_name")
-                .eq("ROOM_ID", roomId)
-                .eq("box_name", boxType)
-                .eq("feed_time_index", dateString)
-                .groupBy("USER_ID", "user_name");
+
+        if (StringUtils.hasText(boxType)){
+            queryWrapper.select("sum(balance)/100 as balance", "sum(actual_price)/100 as actualPrice", "sum(feed_num) as num", "box_name", "user_id", "user_name")
+                    .eq("ROOM_ID", roomId)
+                    .eq("box_name", boxType)
+                    .eq("feed_time_index", dateString)
+                    .groupBy("USER_ID", "user_name");
+        }else {
+            queryWrapper.select("sum(balance)/100 as balance", "sum(actual_price)/100 as actualPrice", "sum(feed_num) as num", "box_name", "user_id", "user_name")
+                    .eq("ROOM_ID", roomId)
+                    .eq("feed_time_index", dateString)
+                    .like("box_name", "盲盒")
+                    .groupBy("USER_ID", "user_name");
+        }
+
+
 
         return  userFeedInfoMapper.selectMaps(queryWrapper);
 
     }
+    public List<Map<String, Object>> getEveryOneRoomGift(String roomId, String dateString) {
 
+        QueryWrapper<UserFeedInfo> queryWrapper = Wrappers.query();
+
+        queryWrapper.select("user_name", "sum(feed_num) as num", "gift_name", "box_name", "SUM(total_price)/100 as total_price")
+                .eq("ROOM_ID", roomId)
+                .eq("feed_time_index", dateString)
+                .groupBy("USER_ID", "gift_name");
+
+
+        return  userFeedInfoMapper.selectMaps(queryWrapper);
+
+    }
     /**
      * 获取直播间指定日期的消费排行
      * @param roomId
