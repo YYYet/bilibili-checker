@@ -11,6 +11,7 @@ import com.bili.common.entity.mysql.Config;
 import com.bili.common.entity.wx.CommandSign;
 import com.bili.common.entity.wx.notice.NoticeDTO;
 import com.bili.service.db.ConfigServiceImpl;
+import com.bili.service.db.LiveWechatRelationServiceImpl;
 import com.bili.service.wechat.command.WxBotCommander;
 import com.bili.service.wechat.factory.CommandFactory;
 import com.bili.service.wechat.bot.WechatBotServiceImpl;
@@ -103,6 +104,7 @@ public class RecordWebHook {
                 String wxId = wxMessageInfo.getStr("sender");
                 commandSignDTO.setWxId(wxId);
             }
+
             String replace = content.replace("@王一狗", "").trim();
             replace = replace.replaceAll("\\s+", "");
             replace = replace.replaceAll("\\p{Zs}", "");

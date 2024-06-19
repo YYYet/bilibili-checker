@@ -6,6 +6,7 @@ import com.bili.service.redis.QueryDataServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,8 +22,15 @@ public class HelloController {
     public static void main(String[] args) {
         System.out.println(DateUtil.offsetDay(new Date(), 0));
     }
+
+    @GetMapping("/config")
+    public String config(Model model) {
+        return "config";
+    }
+
+
     @GetMapping("/test")
-    public String test(Model model, @RequestParam(defaultValue = "24616501") String roomId) {
+    public String test(Model model, @RequestParam(defaultValue = "24616501") String roomId, @RequestParam(required = false) String page) {
         // 获取当前日期
         Date currentDate = new Date();
 
@@ -50,10 +58,14 @@ public class HelloController {
 //
         model.addAttribute("dateMoneyList", dateMoneyList);
         model.addAttribute("currentRoomId", roomId);
+        model.addAttribute("page", "1");
+        if (StringUtils.hasText(page)){
+            model.addAttribute("page", page);
+        }
 //        model.addAttribute("dieByQiantianDate", dieByQiantianDate);
 //        model.addAttribute("dieByZuotianDate", dieByZuotianDate);
 //        model.addAttribute("dieByJintianDate", dieByJintianDate);
-        return "test"; // 对应模板文件名称
+        return "analyze"; // 对应模板文件名称
     }
 
 }

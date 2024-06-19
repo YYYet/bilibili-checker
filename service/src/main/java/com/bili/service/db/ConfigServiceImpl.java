@@ -18,6 +18,18 @@ public class ConfigServiceImpl {
     @Resource
     ConfigMapper configMapper;
 
+
+    public List<Config> getAllConfig(){
+        return configMapper.selectList(null);
+    }
+
+    public int modifyConfig(Config config){
+        return configMapper.updateById(config);
+    }
+    public void insertConfig(Config config){
+        configMapper.insert(config);
+    }
+
     /**
      * 根据配置类别和配置key查询配置项
      * @param key
@@ -35,6 +47,10 @@ public class ConfigServiceImpl {
      */
     public List<Config> getRobotConfig(String key) {
         List<Config> configs = configMapper.selectList(new QueryWrapper<Config>().eq("type", ConfigTypeEnum.ROBOT.name()).eq("name", key).eq("status", 1));
+        return configs;
+    }
+    public List<Config> getUserIpConfig(String key) {
+        List<Config> configs = configMapper.selectList(new QueryWrapper<Config>().eq("type", ConfigTypeEnum.USER_IP.name()).eq("name", key).eq("status", 1));
         return configs;
     }
 

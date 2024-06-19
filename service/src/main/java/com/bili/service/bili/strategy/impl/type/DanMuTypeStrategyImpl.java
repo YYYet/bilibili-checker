@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 /**
  * @author zhuminc
@@ -43,42 +44,9 @@ public class DanMuTypeStrategyImpl implements TypeStrategy {
 
         log.info("房间:【{}】 用户 {}({}) 发送弹幕 【{}】", roomInfoFromRow.getRoomId(), danMu.getUserInfo().getUserName(), danMu.getUserInfo().getUid(), danMu.getMsg());
         String content = danMu.getMsg();
-        String dm = "";
-        if (content.equals("今日流水")) {
-            try {
-                String price = queryDataService.getRoomALlUnfreeGiftPrice(roomInfoFromRow.getRoomId());
-                BigDecimal todayPrice = new BigDecimal(price.toString());
-                dm = "今日截至目前流水合计:" + (todayPrice.divide(BigDecimal.valueOf(10))) + "圆";
-                if (roomInfoFromRow.getRoomId().equals("22594587")){
-                    dm = "今日流水合计:" + (todayPrice.divide(BigDecimal.valueOf(10))) + "圆加800";
-                }
-            } catch (Exception e) {
-                dm = "主播今日还没圈到米，加油加油加油";
-            }
-            botService.sendMsg(roomInfoFromRow.getRoomId(), dm);
-        }
-
-        if (content.equals("昨日流水")) {
-            try {
-                String price = queryDataService.getRoomALlUnfreeGiftPrice(roomInfoFromRow.getRoomId(), -1);
-                BigDecimal todayPrice = new BigDecimal(price);
-                dm = "昨日流水合计:" + (todayPrice.divide(BigDecimal.valueOf(10))) + "圆";
-            } catch (Exception e) {
-                dm = "主播昨日没圈到米，加油加油加油";
-            }
-            botService.sendMsg(roomInfoFromRow.getRoomId(), dm);
-        }
-        if (content.equals("前日流水")) {
-            try {
-                String price = queryDataService.getRoomALlUnfreeGiftPrice(roomInfoFromRow.getRoomId(), -2);
-                BigDecimal todayPrice = new BigDecimal(price);
-                dm = "前日流水合计:" + (todayPrice.divide(BigDecimal.valueOf(10))) + "圆";
-
-            } catch (Exception e) {
-               dm = "主播前日没圈到米，加油加油加油";
-
-            }
-            botService.sendMsg(roomInfoFromRow.getRoomId(), dm);
+        HashMap<String, String> result = botService.checkMsg(roomInfoFromRow.getRoomId(), content);
+        if (result.get("send").equals("true")){
+            botService.sendMsg(roomInfoFromRow.getRoomId(), result.get("dm"));
         }
 
         return null;

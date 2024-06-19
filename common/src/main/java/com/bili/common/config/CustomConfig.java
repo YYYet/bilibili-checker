@@ -16,4 +16,6 @@ public class CustomConfig {
     public static String NET_FRP_HOST = "NET_FRP_HOST";
     public static String NET_PAGE_ANALYSIS = "NET_PAGE_ANALYSIS";
     public static String BILISDK_PATH = "BILISDK_PATH";
+    public static String ADMIN = "ADMIN";
+    public static String USER_IP = "USER_IP";
 }
