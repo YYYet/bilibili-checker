@@ -104,13 +104,13 @@ public class UserFeedInfoServiceImpl {
                     .eq("ROOM_ID", roomId)
                     .eq("box_name", boxType)
                     .eq("feed_time_index", dateString)
-                    .groupBy("USER_ID", "user_name");
+                    .groupBy("USER_ID", "box_name");
         }else {
             queryWrapper.select("sum(balance)/100 as balance", "sum(actual_price)/100 as actualPrice", "sum(feed_num) as num", "box_name", "user_id", "user_name")
                     .eq("ROOM_ID", roomId)
                     .eq("feed_time_index", dateString)
                     .like("box_name", "盲盒")
-                    .groupBy("USER_ID", "user_name");
+                    .groupBy("USER_ID", "box_name");
         }
 
 

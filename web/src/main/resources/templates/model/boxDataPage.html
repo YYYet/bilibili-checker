@@ -38,6 +38,7 @@
             <el-table-column label="盈亏" prop="balance" sortable>
                 <template slot-scope="scope">
                     <el-link type="success" v-if="scope.row.balance > 0" >{{scope.row.balance}}</el-link>
+                    <el-link type="warning" v-if="scope.row.balance == 0" >{{scope.row.balance}}</el-link>
                     <el-link type="danger" v-if="scope.row.balance < 0" >{{scope.row.balance}}</el-link>
                 </template>
             </el-table-column>
