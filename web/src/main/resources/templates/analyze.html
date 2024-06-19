@@ -27,7 +27,7 @@
     </el-select>
 
     <div  v-show="tarGetOptionValue=='1'">
-        <div th:replace="~{model/lineChartPage :: lineChartPage}"></div>
+        <div th:insert="~{model/lineChartPage :: lineChartPage}"></div>
     </div>
 <!--    <div  v-show="tarGetOptionValue=='2'">-->
 <!--        <div th:replace="~{model/parChartPage :: parChartPage}"></div>-->
@@ -36,16 +36,16 @@
     <div v-show="tarGetOptionValue=='3'">
         <el-tabs v-model="activeName"  type="card">
             <el-tab-pane label="盲盒数据" name="first">
-                <div th:replace="~{model/boxDataPage :: boxDataPage}"></div>
+                <div th:insert="~{model/boxDataPage :: boxDataPage}"></div>
             </el-tab-pane>
             <el-tab-pane label="礼物清单" name="second" >
 
                 <el-tabs v-model="activeName2"  @tab-click="handleClick"  type="card">
                     <el-tab-pane label="数据" name="second_data">
-                        <div th:replace="~{model/giftDataPage :: giftDataPage}"></div>
+                        <div th:insert="~{model/giftDataPage :: giftDataPage}"></div>
                     </el-tab-pane>
                     <el-tab-pane label="图表" name="second_chart">
-                        <div th:replace="~{model/parChartPage :: parChartPage}"></div>
+                        <div th:insert="~{model/parChartPage :: parChartPage}"></div>
                     </el-tab-pane>
                 </el-tabs>
 
@@ -77,7 +77,9 @@
     .el-table .success-row {
         background: #f0f9eb;
     }
-
+    .el-table{
+        overflow:visible !important;
+    }
 </style>
 <!-- 引入Vue.js和ECharts -->
 <script th:src="@{/js/vue.js}"></script>
@@ -365,7 +367,7 @@
           // 使用 nextTick 确保 DOM 更新完成后执行操作
 
           this.drawLineChart();
-          //
+
           // this.$nextTick(function () {
           //     this.drawPieChart();
           // });
@@ -376,6 +378,7 @@
           // setInterval(() => {
           //     that.updateEnterRoomDataLineChartDataByDate("");
           // }, 5000);
+
 
 
           this.lineChart.on('click', function (params) {
@@ -393,6 +396,15 @@
       methods: {
           handleClick(tab, event) {
               console.log(tab, event);
+              console.log("选择了"+tab.label);
+
+              if (tab.label == "图表"){
+                  this.$nextTick(function () {
+                      that.drawPieChart();
+                      that.updateBarChartDataByDate(this.selectedDate);
+                  });
+
+              }
               // this.drawPieChart();
           },
           tableRowClassName({row, rowIndex}) {
@@ -488,7 +500,6 @@
               });
           },
           updateBarChartDataByDate(date) {
-              this.drawPieChart();
               this.pieChart.showLoading();
 
               that = this;
@@ -596,6 +607,7 @@
                       const day = currentDate.getDate().toString().padStart(2, '0');
                       const formattedDate = year + '-' + month + '-' + day;
                       console.log("formattedDate "+formattedDate);
+                      that.selectedDate = formattedDate;
                       that.selectedBoxDate = formattedDate;
                       that.selectedGiftDataDate = formattedDate;
                       that.updateBoxChartDataByDate(formattedDate);
