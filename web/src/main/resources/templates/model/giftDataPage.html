@@ -20,13 +20,14 @@
         </div>
     </el-row>
     <el-row :gutter="10">
-        <el-divider>礼物数据（电池）</el-divider>
+        <el-divider v-cloak>礼物数据（电池）</el-divider>
     </el-row>
     <el-row :gutter="10">
         <!--            <div id="boxChart"  :style="{ width: chartWidth, height: chartHeight }" class="col"></div>-->
         <!--                  :default-sort = "{prop: 'total_price', order: 'ascending'}" v-loading="loading">-->
         <el-table :data="giftDataList" style="width: 100%"
                   show-summary
+                  max-height="450"
                   stripe
                   :default-sort = "{prop: 'total_price', order: 'descending'}" v-loading="giftLoading">
             <!--                <el-table-column label="uid" prop="user_id"></el-table-column>-->
