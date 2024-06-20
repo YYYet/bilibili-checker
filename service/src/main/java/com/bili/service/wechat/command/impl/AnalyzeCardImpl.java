@@ -51,11 +51,11 @@ public class AnalyzeCardImpl implements WxBotCommander {
         if (arg.isGroup()){
             key = arg.getRoomId();
         }
-        if (arg.isGroup()){
+        if (!arg.isGroup()){
             key = arg.getWxId();
         }
         if (!liveWechatRelationService.hasRelation(key, value.getStr("roomId"))){
-            log.info("当前直播间和微信群/用户无绑定关系");
+            log.info("当前直播间[{}]和微信群/用户[{}]无绑定关系", value.getStr("roomId"), key);
             return null;
         }
 

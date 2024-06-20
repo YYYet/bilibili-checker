@@ -1,9 +1,13 @@
 package com.bili.common.util;
 
+import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author zhuminc
@@ -14,6 +18,16 @@ public class CommonHttpUtil {
     public JSONObject getRoomInfo(String roomId){
         String res = cn.hutool.http.HttpUtil.get("https://api.live.bilibili.com/room/v1/Room/get_info?room_id=" + roomId);
         return JSONUtil.parseObj(res);
+    }
+
+    public JSONObject getRoomInfoByUserIds(ArrayList<String> uids){
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        map.put("uids", uids);
+        HttpRequest request = cn.hutool.http.HttpUtil.createPost("https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids");
+        request.body(JSONUtil.toJsonStr(map));
+        request.header(Header.USER_AGENT, "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36 Edg/126.0.0.0");
+        String body = request.execute().body();
+        return JSONUtil.parseObj(body);
     }
 
     public String getRoomInfo(String roomId, String cookie){

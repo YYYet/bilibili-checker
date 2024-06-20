@@ -20,6 +20,15 @@ public class RecordServiceImpl {
     @Resource
     CommonHelper commonHelper;
 
+    public void recordRoomLiveStatus(String roomId, int liveStatus){
+        redisTemplate.opsForValue().set(roomId+":liveStatus", liveStatus+"");
+    }
+    public int getRoomLiveStatus(String roomId){
+        if (redisTemplate.opsForValue().get(roomId+":liveStatus") == null){
+            return 0;
+        }
+        return Integer.parseInt(redisTemplate.opsForValue().get(roomId+":liveStatus").toString());
+    }
     /**
      * 计算礼物价格并存入redis
      * @param feedInfo

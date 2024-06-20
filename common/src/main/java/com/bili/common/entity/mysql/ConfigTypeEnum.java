@@ -10,6 +10,7 @@ public enum ConfigTypeEnum {
     ANALYZE_CARD,
     BARRAGE,
     USER_IP,
+    WATCH_ROOM,
     ROBOT, LIVE_NOTICE;
 
 

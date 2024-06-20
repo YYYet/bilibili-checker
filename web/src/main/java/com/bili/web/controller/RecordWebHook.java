@@ -115,6 +115,10 @@ public class RecordWebHook {
         }
     }
 
+    public void processingBySelf(RecordEventDTO recordEvent) {
+        log.info("收到自检测的直播间的信息==> {}", JSONUtil.toJsonStr(recordEvent));
+
+    }
 
     @PostMapping
     public void processing(@RequestBody RecordEventDTO recordEvent) {
