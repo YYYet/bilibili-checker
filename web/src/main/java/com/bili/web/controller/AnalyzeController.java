@@ -37,10 +37,16 @@ public class AnalyzeController {
      * @return
      */
     @GetMapping("getDieData")
-    public ArrayList<HashMap<String, Object>> geta(@RequestParam String date, @RequestParam(defaultValue = "24616501") String roomId){
+    public ArrayList<HashMap<String, Object>> geta(@RequestParam String date, @RequestParam(defaultValue = "") String roomId){
         date = date.replace("-", ":");
         ArrayList<HashMap<String, Object>> dieByDate = queryDataService.getDieByDate(date, roomId);
         return dieByDate;
+    }
+
+    @GetMapping("getUserFeedInfoByDb")
+    public List<Map<String, Object>> getUserFeedInfoByDb(@RequestParam String date, @RequestParam(defaultValue = "") String roomId){
+//        date = date.replace("-", ":");
+        return userFeedInfoService.getUserFeedInfoByDb(roomId, date);
     }
 
     /**
@@ -49,7 +55,7 @@ public class AnalyzeController {
      * @return
      */
     @GetMapping("getEnterRoomData")
-    public HashMap<String, Object> getEnterRoomDataLineOption(@RequestParam(defaultValue = "24616501") String roomId){
+    public HashMap<String, Object> getEnterRoomDataLineOption(@RequestParam(defaultValue = "") String roomId){
         String date = DateUtil.now();
         return enterRoomInfoService.getEnterRoomData(roomId, date);
     }
