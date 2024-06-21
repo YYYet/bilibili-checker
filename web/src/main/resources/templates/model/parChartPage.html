@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="parChartPage" >
+<div th:fragment="parChartPage" style="height: 100%">
     <el-row :gutter="10">
         <div>
             <el-date-picker
@@ -33,7 +33,7 @@
     </el-row>
     <el-row :gutter="10">
         <!--        <div id="barChart" v-loading="barChartLoading" :style="{ width: chartWidth, height: chartHeight }" class="col"></div>-->
-        <div id="pieChart"  :style="{ width: chartWidth, height: chartHeight }" class="col"  v-if="activeName2 == 'second_chart'"></div>
+        <div id="pieChart"  :style="{ width: parWidth, height: parHeight }" class="col"  v-if="activeName2 == 'second_chart'"></div>
     </el-row>
 </div>
 </body>

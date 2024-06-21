@@ -85,7 +85,8 @@ public class DanMuUtil {
         FeedInfo feedInfo = new FeedInfo();
         GiftInfo giftInfo = new GiftInfo();
         JsonNode source = row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.SOURCE);
-        giftInfo.setGiftPrice(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.PRICE).asLong());
+        // 这里除以数量获取真实礼物单价，因为在usertoast中年舰会计算为12个月舰长，但price为总价
+        giftInfo.setGiftPrice(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.PRICE).asLong()/row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.NUM).asLong());
         giftInfo.setGiftName(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.UNIT).asText()+row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.ROLE_NAME).asText());
         UserInfo userInfo = new UserInfo();
         userInfo.setUid(row.get(BiliConstant.MSG).get(BiliConstant.DATA).get(BiliConstant.UID).asText());

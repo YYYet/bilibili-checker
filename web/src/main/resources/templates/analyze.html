@@ -124,6 +124,8 @@
           barChartLoading: false, // 是否移动端
           chartWidth: '100%', // 初始宽度
           chartHeight: '400px', // 初始高度
+          parWidth: '100%', // 初始宽度
+          parHeight: '400px', // 初始高度
           dateMoneyList: [],
           barChart: null,
           lineChart: null,
@@ -500,48 +502,41 @@
               });
           },
           updateBarChartDataByDate(date) {
+              this.drawPieChart();
               this.pieChart.showLoading();
 
               that = this;
               $.ajax({
-                  url: '/analyze/getDieData?date=' + date+"&roomId="+currentRoomId, // 后端接口地址
+                  url: '/analyze/getUserFeedInfoByDb?date=' + date+"&roomId="+currentRoomId, // 后端接口地址
                   type: 'GET',
                   success: function (data) {
-                      // 更新页面中的数据
-                      console.log("data " + JSON.stringify(data));
-
                       var barCategories = [];
                       var barData = [];
                       var pieData = [];
-                      // that.barData.barMax = data.length;
-                      // that.pieData = [];
                       that.todayTotal = 0;
                       data.forEach(item => {
-                          barCategories.push(item.name);
+                          barCategories.push(item.user_name);
                           barData.push(item.price);
                           var obj = {};
-                          obj.name = item.name;
+                          obj.name = item.user_name;
                           obj.value = item.price;
                           pieData.push(obj);
                           that.todayTotal = that.todayTotal + item.price;
                       })
 
                       that.$nextTick(function () {
-                          // that.barOption.series[0].data = barData;
-                          // that.barOption.yAxis.data = barCategories;
                           that.pieOption.series[0].data = pieData;
-                          // that.barChart.setOption(that.barOption);
                           that.pieChart.setOption(that.pieOption);
                           that.pieChart.hideLoading();
                       });
 
-                      // $('#data-container').html('<p>' + data + '</p>');
                   },
                   error: function () {
                       console.log('获取数据失败');
                       that.pieChart.hideLoading();
                   }
               });
+
           },
           updateBarChartData() {
               // var data = barOption.series[0].data;

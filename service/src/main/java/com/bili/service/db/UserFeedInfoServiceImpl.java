@@ -28,6 +28,18 @@ public class UserFeedInfoServiceImpl {
     @Resource
     UserFeedInfoMapper userFeedInfoMapper;
 
+    public List<Map<String, Object>>  getUserFeedInfoByDb(String roomId, String dateStr){
+        QueryWrapper<UserFeedInfo> queryWrapper = Wrappers.query();
+
+            queryWrapper.select("user_name", "SUM(total_price)/1000  as price")
+                    .eq("ROOM_ID", roomId)
+                    .eq("feed_time_index", dateStr)
+                    .ne("gift_price", 0)
+                    .groupBy("USER_ID");
+
+       return userFeedInfoMapper.selectMaps(queryWrapper);
+    }
+
 
     public void recordUserFeedFromGuardData(JsonNode row){
         FeedInfo feedInfo = DanMuUtil.getGiftFromGuardData(row);
