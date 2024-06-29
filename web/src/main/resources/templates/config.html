@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>后台管理配置项页面</title>
     <!-- 引入 Vue.js -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="../static/js/vue.js"></script>
     <!-- 引入 Element UI CSS -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入 Element UI JS -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -53,7 +54,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="saveNewConfig">保存</el-button>
+<!--            <el-button @click="saveNewConfig">保存</el-button>-->
             <el-button @click="addDialogVisible = false">取消</el-button>
         </div>
     </el-dialog>
@@ -116,10 +117,7 @@
     new Vue({
         el: '#app',
         data: {
-            configItems: [
-                { id: 1, description: '描述1', name: '名称1', type: '类型1', status: '启用', value: '值1' },
-                { id: 2, description: '描述2', name: '名称2', type: '类型2', status: '停用', value: '值2' }
-            ],
+            configItems: [],
             addDialogVisible: false,
             editDialogVisible: false,
             viewDialogVisible: false,
@@ -133,6 +131,9 @@
             },
             editedConfigItem: {},
             viewConfigItem: {}
+        },
+        created: function () {
+            this.getAllConfig();
         },
         methods: {
             showAddDialog() {
@@ -153,6 +154,19 @@
             viewConfig(row) {
                 this.viewConfigItem = { ...row };
                 this.viewDialogVisible = true;
+            },
+            getAllConfig(){
+                that = this;
+                $.ajax({
+                    url: 'manage/getAllConfig', // 后端接口地址
+                    type: 'GET',
+                    success: function (data) {
+                        that.configItems = data;
+                    },
+                    error: function () {
+                        console.log('获取数据失败');
+                    }
+                });
             }
         }
     });
