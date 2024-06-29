@@ -40,6 +40,7 @@ public class UserInfoServiceImpl {
                     userDataHisMapper.insert(userDataHis);
                 }
 
+                userDataHis.setId(null);
                 userDataHis.setDataType(UserHisDataTypeEnum.HIS_NAME.name());
                 userDataHis.setUserData(user.getUserName());
                 exists = userDataHisMapper.exists(new QueryWrapper<UserDataHis>().eq("uid", userInfo.getUid()).eq("user_data", user.getUserName()));
@@ -55,6 +56,7 @@ public class UserInfoServiceImpl {
                         userDataHisMapper.insert(userDataHis);
                     }
                 }
+                userDataHis.setId(null);
                 if (!userFromDb.getUserName().equals(user.getUserName())){
                     userDataHis.setDataType(UserHisDataTypeEnum.HIS_NAME.name());
                     userDataHis.setUserData(user.getUserName());
