@@ -19,7 +19,6 @@ public class DanMuScopeImpl implements WxBotCommander {
     private WechatBotServiceImpl wechatBotServiceImpl;
     @Override
     public String exec(CommandSign arg) {
-
         if (StringUtils.hasText(arg.getRoomId()) && arg.isGroup()){
             wechatBotServiceImpl.sendMsgAuto("test", arg.getRoomId());
         }

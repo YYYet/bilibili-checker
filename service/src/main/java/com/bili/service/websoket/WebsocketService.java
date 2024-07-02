@@ -6,12 +6,15 @@ import com.bili.common.entity.bili.PayloadData;
 import com.bili.service.bili.factory.TypeStrategyFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Service;
+import reactor.util.retry.Retry;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -31,6 +34,13 @@ public class WebsocketService {
     ObjectMapper objectMapper;
     @Resource
     TypeStrategyFactory typeStrategyFactory;
+
+    @PostConstruct
+    public void init() {
+        builder.rsocketConnector(connector ->
+                connector.reconnect(Retry.fixedDelay(10, Duration.ofSeconds(5)))); // 每次重连间隔5秒
+
+    }
 
 
 
