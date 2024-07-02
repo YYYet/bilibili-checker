@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author zhuminc
@@ -56,18 +58,49 @@ public class WebsocketService {
     }
 
     public void sendSubscribe(String url, String taskId){
+        AtomicInteger count = new AtomicInteger();
+        AtomicBoolean connect = new AtomicBoolean(false);
         JsonNode subscribe = this.buildPayloadData(taskId, BiliConstant.SUBSCRIBE);
         RSocketRequester rSocketRequester = this.buildConnect(url);
         rSocketRequester.route(BiliConstant.EMPTY)
                 .data(subscribe)
                 .retrieveFlux(JsonNode.class)
                 .subscribe(response->{
+                    connect.set(false);
+                    count.set(0);
                     typeStrategyFactory.getStrategyAndExec(response);
                 }, error->{
                     log.error("rSocketRequester error {}", error);
+                    connect.set(true);
+                    count.getAndIncrement();
+                    if (connect.get() && count.get() <= 5){
+                        sendSubscribeRetry(url, taskId, connect, count);
+                    }
                 });
         rSocketRequesterMap.put(taskId, rSocketRequester);
     }
+
+    public void sendSubscribeRetry(String url, String taskId, AtomicBoolean connect, AtomicInteger count){
+        JsonNode subscribe = this.buildPayloadData(taskId, BiliConstant.SUBSCRIBE);
+        RSocketRequester rSocketRequester = this.buildConnect(url);
+        rSocketRequester.route(BiliConstant.EMPTY)
+                .data(subscribe)
+                .retrieveFlux(JsonNode.class)
+                .subscribe(response->{
+                    connect.set(false);
+                    count.set(0);
+                    typeStrategyFactory.getStrategyAndExec(response);
+                }, error->{
+                    log.error("任务{} 第{}次重连 sendSubscribeRetry rSocketRequester error {}", taskId, count.get(), error);
+                    connect.set(true);
+                    count.getAndIncrement();
+                    if (connect.get() && count.get() <= 5){
+                        sendSubscribeRetry(url, taskId, connect, count);
+                    }
+                });
+        rSocketRequesterMap.put(taskId, rSocketRequester);
+    }
+
     public void sendUnSubscribe(String url, String taskId){
         JsonNode subscribe = this.buildPayloadData(taskId, "UNSUBSCRIBE");
 //        rSocketRequester = this.buildConnect(url);
