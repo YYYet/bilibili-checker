@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class BiliBotServiceImpl {
     private ConfigServiceImpl configService;
     @Resource
     private QueryDataServiceImpl queryDataService;
+
     @Resource
     TvLiveSdk tvLiveSdk;
 
@@ -88,6 +90,15 @@ public class BiliBotServiceImpl {
             }
             result.put("send", "true");
         }
+
+        if (content.equals("明日流水")) {
+            List<Config> robotConfig = configService.getRobotConfig(CustomConfig.TOMORROW_REPLAY_KEY);
+            Collections.shuffle(robotConfig);
+            Config config = robotConfig.get(0);
+            dm = config.getValue();
+            result.put("send", "true");
+        }
+
         result.put("dm", dm);
         return result;
     }
