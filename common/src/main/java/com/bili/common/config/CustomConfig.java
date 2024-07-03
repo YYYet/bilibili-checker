@@ -18,4 +18,5 @@ public class CustomConfig {
     public static String BILISDK_PATH = "BILISDK_PATH";
     public static String ADMIN = "ADMIN";
     public static String USER_IP = "USER_IP";
+    public static String TOMORROW_REPLAY_KEY = "TOMORROW_REPLAY_KEY";
 }

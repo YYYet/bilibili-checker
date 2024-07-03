@@ -39,7 +39,10 @@ public class ConfigServiceImpl {
         List<Config> configs = configMapper.selectList(new QueryWrapper<Config>().eq("type", ConfigTypeEnum.DM_LOG.name()).eq("name", key));
         return configs.size() == 0 ? null : configs.get(0);
     }
-
+    public List<Config> getReplayConfig(String key) {
+        List<Config> configs = configMapper.selectList(new QueryWrapper<Config>().eq("type", ConfigTypeEnum.ROBOT.name()).eq("name", key).eq("status", 1));
+        return configs;
+    }
     /**
      * 通过key查询bot
      * @param key
