@@ -3,7 +3,6 @@ package com.bili.web.controller.front;
 import com.bili.common.entity.mysql.Config;
 import com.bili.service.db.ConfigServiceImpl;
 import jakarta.annotation.Resource;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
